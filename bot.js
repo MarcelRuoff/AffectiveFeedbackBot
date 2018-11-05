@@ -3,8 +3,27 @@
 
 const { ActivityTypes } = require('botbuilder');
 
+// Adaptive Cards
 // Turn counter property
 const TURN_COUNTER_PROPERTY = 'turnCounterProperty';
+
+const { CardFactory } = require('botbuilder');
+
+// Import AdaptiveCard content.
+const FlightItineraryCard = require('./resources/FlightItineraryCard.json');
+const ImageGalleryCard = require('./resources/ImageGalleryCard.json');
+const LargeWeatherCard = require('./resources/LargeWeatherCard.json');
+const RestaurantCard = require('./resources/RestaurantCard.json');
+const SolitaireCard = require('./resources/SolitaireCard.json');
+
+// Create array of AdaptiveCard content, this will be used to send a random card to the user.
+const CARDS = [
+    FlightItineraryCard,
+    ImageGalleryCard,
+    LargeWeatherCard,
+    RestaurantCard,
+    SolitaireCard
+];
 
 class MyBot {
   /**
@@ -27,7 +46,12 @@ class MyBot {
       // read from state.
       let count = await this.countProperty.get(turnContext);
       count = count === undefined ? 1 : ++count;
-      await turnContext.sendActivity(`${count}: Marcel said "${turnContext.activity.text}"`);
+      //await turnContext.sendActivity(`${count}: Marcel said "${turnContext.activity.text}"`);
+        const randomlySelectedCard = CARDS[Math.floor((Math.random() * CARDS.length - 1) + 1)];
+        await turnContext.sendActivity({
+            text: 'Here is an Adaptive Card:',
+            attachments: [CardFactory.adaptiveCard(randomlySelectedCard)]
+        });
       // increment and set turn counter.
       await this.countProperty.set(turnContext, count);
     } else {
