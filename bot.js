@@ -47,10 +47,17 @@ class MyBot {
       let count = await this.countProperty.get(turnContext);
       count = count === undefined ? 1 : ++count;
       //await turnContext.sendActivity(`${count}: Marcel said "${turnContext.activity.text}"`);
-        const randomlySelectedCard = CARDS[Math.floor((Math.random() * CARDS.length - 1) + 1)];
+
+
         await turnContext.sendActivity({
             text: 'Here is an Adaptive Card:',
-            attachments: [CardFactory.adaptiveCard(randomlySelectedCard)]
+            attachments: [
+                {
+                    contentType: "image/jpg",
+                    contentUrl: "https://chart.googleapis.com/chart?cht=lc&chs=250x150&chd=t4:10,20,30,40,10,20,40,50,10,20,40|10,20,30,40,20,60,70,80,80,80,80&chxt=x,y",
+                    name: "matsu.jpg"
+                }
+            ]
         });
       // increment and set turn counter.
       await this.countProperty.set(turnContext, count);
